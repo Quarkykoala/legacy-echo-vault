@@ -1,0 +1,36 @@
+# Supabase API Standards
+
+## Client Setup
+- Type-safe client configuration
+- Environment variables
+- Error handling wrapper
+- Retry logic
+- Connection monitoring
+
+## Data Access
+- Row Level Security (RLS)
+- Typed queries
+- Optimistic updates
+- Batch operations
+- Real-time subscriptions
+
+## Storage
+- Secure file uploads
+- Content type validation
+- Size limits (20MB)
+- Folder structure
+- Cleanup policies
+
+## Caching
+- React Query integration
+- Stale-while-revalidate
+- Prefetching
+- Cache invalidation
+- Offline persistence
+
+## Error Handling
+- Network errors
+- Auth errors
+- Validation errors
+- Rate limiting
+- Timeout handling 

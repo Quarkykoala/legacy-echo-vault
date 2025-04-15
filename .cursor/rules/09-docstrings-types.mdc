@@ -1,0 +1,36 @@
+# Docstrings & Types
+
+## TypeScript
+- Strict mode enabled
+- No any types
+- Proper generics
+- Interface over type
+- Readonly when immutable
+
+## Documentation
+- JSDoc for public APIs
+- Clear descriptions
+- Parameter documentation
+- Return type documentation
+- Example usage
+
+## Component Props
+- Prop interface documentation
+- Required vs optional
+- Default values
+- Prop validation
+- Type exports
+
+## Function Documentation
+- Purpose description
+- Parameter types
+- Return values
+- Side effects
+- Error cases
+
+## Code Comments
+- Why over what
+- Complex logic explanation
+- Edge case documentation
+- TODO format
+- Version notes 

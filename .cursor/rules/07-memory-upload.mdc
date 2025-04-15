@@ -1,0 +1,36 @@
+# Memory Upload UX
+
+## Audio Recording
+- Native recorder interface
+- 5-minute maximum length
+- Supported formats (.mp3, .m4a, .aac)
+- 20MB size limit
+- Quality indicators
+
+## Upload Experience
+- Progress indication
+- Cancel capability
+- Pause/Resume
+- Offline queue
+- Background upload
+
+## Time Capsule
+- Default 30-day unlock
+- Maximum 100-year future date
+- Clear lock status
+- Countdown display
+- Access controls
+
+## Memory Organization
+- Tagging system
+- Family tree linking
+- Timeline view
+- Search capability
+- Filter options
+
+## Emotional Design
+- Warm interface
+- Clear feedback
+- Respectful tone
+- Privacy indicators
+- Trust building 

@@ -1,0 +1,36 @@
+# Routing & Authentication
+
+## Route Structure
+- Nested routing with React Router v6
+- Protected route wrappers
+- Loading states during auth check
+- 404 handling
+- Error boundaries
+
+## Authentication
+- Supabase Auth integration
+- Email-only invites
+- 7-day invite expiry
+- Owner approval required
+- Max 20 members per vault
+
+## Authorization
+- Role-based access control
+- Vault-level permissions
+- Memory access rules
+- Time capsule restrictions
+- Admin capabilities
+
+## Security
+- HTTPS only
+- Secure session handling
+- Token refresh logic
+- Logout on token expiry
+- Cross-tab synchronization
+
+## Performance
+- Route-based code splitting
+- Preload critical routes
+- Cache auth state
+- Optimize redirects
+- Handle offline access 

@@ -1,0 +1,41 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Component Guidelines
+
+## Structure
+- Use functional components with TypeScript
+- Implement ARIA roles and accessibility features
+- Maximum 300 lines of code per file
+- Use Shadcn/ui components as base
+- Follow TailwindCSS class naming conventions
+
+## Requirements
+- Export default component matching filename
+- Include prop interface with JSDoc
+- Implement error boundaries for critical operations
+- Support mobile-first responsive design
+- Use native recording interface for audio components
+
+## State Management
+- Prefer hooks for complex state
+- Use React.memo for expensive renders
+- Implement loading states
+- Handle error states gracefully
+- Support offline capabilities where relevant
+
+## Styling
+- Use TailwindCSS utility classes
+- Follow design system color tokens
+- Support dark/light modes
+- Use CSS variables for theme values
+- No inline styles
+
+## Performance
+- Lazy load heavy components
+- Implement proper suspense boundaries
+- Optimize media loading
+- Use proper image formats and sizes
+- Monitor render cycles 

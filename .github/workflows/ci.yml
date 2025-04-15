@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install backend dependencies
+        run: pip install -r backend/requirements.txt
+      - name: Lint backend (flake8)
+        run: flake8 backend/ tests/
+      - name: Check backend formatting (black)
+        run: black --check backend/ tests/
+      - name: Run backend tests
+        run: pytest
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend/my-app/apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install frontend dependencies
+        run: npm install
+      - name: Lint frontend
+        run: npm run lint
+      - name: Check frontend formatting
+        run: npm run format
+      - name: Type check frontend
+        run: npm run type-check
+      - name: Run frontend tests
+        run: npm test -- --coverage 

@@ -1,0 +1,149 @@
+{
+  "description": "LegacyChain Development Rules (.cursorrules)\nAgent-mode prompt engineering for zero-iteration MVP delivery.\nIncludes enhanced debugging flow, structured prompting, emotional UX safeguards, and architectural consistency.",
+  "version": 1,
+  "technical_specs": {
+    "vault_structure": {
+      "multiple_vaults_per_user": true,
+      "nested_vaults": false,
+      "max_members_per_vault": 20
+    },
+    "memory_limits": {
+      "max_audio_length": 300,
+      "supported_formats": [".mp3", ".m4a", ".aac"],
+      "max_file_size": 20971520
+    },
+    "timeline_features": {
+      "default_unlock_period": 30,
+      "max_future_date": 36500
+    },
+    "auth": {
+      "invite_system": {
+        "email_only": true,
+        "expiry_period": 7
+      },
+      "auto_approve": false
+    },
+    "ui": {
+      "themes": ["sepia", "midnight", "pearl", "dusk"],
+      "allow_custom_colors": false,
+      "recording_interface": "native",
+      "offline_support": "partial"
+    },
+    "platform": {
+      "web_only": true,
+      "browser_support": ["Safari >= 15", "Chrome >= 100", "Edge >= 100"],
+      "invite_only_beta": true,
+      "max_beta_users": 100
+    },
+    "data": {
+      "inactive_account_retention_days": 365,
+      "deleted_memory_retention_days": 30,
+      "end_to_end_encryption": false,
+      "backup_strategy": "Supabase + Vercel backups"
+    }
+  },
+  "rules": [
+    {
+      "when": "user edits a file in src/components",
+      "do": {
+        "prompt": "Generate a TailwindCSS + Shadcn/ui functional component. Use strict TypeScript types. Component must support ARIA roles and accessibility. Limit file to 300 LOC."
+      }
+    },
+    {
+      "when": "user writes a new hook in src/hooks",
+      "do": {
+        "prompt": "Create a well-typed React Hook named useX. Follow single-responsibility principle. Include proper loading, error, and success states."
+      }
+    },
+    {
+      "when": "user defines a form using React Hook Form",
+      "do": {
+        "prompt": "Build a form using React Hook Form and TailwindCSS. Add schema validation (zod or native). Include loading and error UI states. Strict typing required."
+      }
+    },
+    {
+      "when": "user adds a route via React Router",
+      "do": {
+        "prompt": "Define protected route using React Router v6. Use Supabase Auth guard. Show loader if auth state is undetermined. Output only code."
+      }
+    },
+    {
+      "when": "user creates a Supabase API call",
+      "do": {
+        "prompt": "Write a typed API call using Supabase client and React Query. Use optimistic updates if appropriate. Wrap in try/catch. Output only code."
+      }
+    },
+    {
+      "when": "error detected during execution or typing",
+      "do": {
+        "prompt": "Pause. List top 3–5 likely root causes. Log assumptions. Validate key variables. THEN and only then suggest code fix."
+      }
+    },
+    {
+      "when": "user initiates a memory or time capsule feature",
+      "do": {
+        "prompt": "Build emotional UX interface for voice/text memory upload. Respect future unlock dates. Add Supabase Storage and secure schema link."
+      }
+    },
+    {
+      "when": "component exceeds 300 LOC",
+      "do": {
+        "warn": "Refactor component into smaller units. 300 LOC max per file is enforced. Consider moving reusable logic into hooks or utils."
+      }
+    },
+    {
+      "when": "user creates a new interface or model",
+      "do": {
+        "prompt": "Define a well-typed interface. Store in /types. Use PascalCase. If shared across frontend/backend, namespace under shared/types."
+      }
+    },
+    {
+      "when": "AI is uncertain about logic or context",
+      "do": {
+        "prompt": "Use step-back prompting. Ask a broader question or reflect on the assumptions first. Then resume code generation."
+      }
+    },
+    {
+      "when": "user merges or commits to main",
+      "do": {
+        "prompt": "Run unit tests, integration tests, and lint checks. If any fail, revert or fix automatically. Output only code logs."
+      }
+    },
+    {
+      "when": "user changes data models in /types or modifies schema",
+      "do": {
+        "prompt": "Generate or update a matching Supabase migration file. Keep naming consistent. Output code only, no commentary."
+      }
+    },
+    {
+      "when": "user writes a new function over 10 LOC",
+      "do": {
+        "prompt": "Enforce docstrings or JSDoc describing params, returns, usage. Output code only with docstrings inline."
+      }
+    },
+    {
+      "when": "user edits a file in src/components exceeding 200 LOC",
+      "do": {
+        "prompt": "Wrap critical operations in React error boundaries or fallback UI. Keep total LOC < 300. Output code only."
+      }
+    },
+    {
+      "when": "user attempts to commit code with an inline secret or env var",
+      "do": {
+        "warn": "Detected potential credentials or secrets. Move them to .env and .gitignore if not done already."
+      }
+    },
+    {
+      "when": "user modifies memory/capsule logic",
+      "do": {
+        "prompt": "Write code in a modular way so the logic is easily portable for a future Swift refactor. Strictly separate UI from business logic."
+      }
+    },
+    {
+      "when": "user modifies a stateful component in src/components",
+      "do": {
+        "prompt": "Check if heavy calculations can be memoized with React.useMemo or React.memo to reduce re-renders. Output code only."
+      }
+    }
+  ]
+} 

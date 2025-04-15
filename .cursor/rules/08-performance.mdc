@@ -1,0 +1,36 @@
+# Performance Optimization
+
+## Component Optimization
+- React.memo for expensive renders
+- useMemo for calculations
+- useCallback for handlers
+- Proper key usage
+- Virtual lists for long content
+
+## Media Handling
+- Lazy loading
+- Progressive loading
+- Proper formats
+- Size optimization
+- Cache strategy
+
+## State Management
+- Minimize rerenders
+- Local state when possible
+- Proper context usage
+- Batch updates
+- Selective subscriptions
+
+## Network
+- Request caching
+- Prefetching
+- Compression
+- Connection resilience
+- Offline support
+
+## Metrics
+- Load time < 2s
+- First paint < 1s
+- TTI < 3s
+- Bundle size monitoring
+- Performance budgets 

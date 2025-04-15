@@ -1,0 +1,36 @@
+# Migration Naming Conventions
+
+## File Structure
+- Timestamp prefix
+- Descriptive name
+- Underscore separation
+- Action indication
+- Version tracking
+
+## Naming Pattern
+- YYYYMMDDHHMMSS_action_table_description.sql
+- Use lowercase
+- No spaces
+- Clear purpose
+- Reversible indication
+
+## Content Structure
+- Up migration
+- Down migration
+- Transaction wrapping
+- Comments
+- Validation
+
+## Best Practices
+- Single responsibility
+- Atomic changes
+- Data preservation
+- Performance consideration
+- Rollback testing
+
+## Documentation
+- Purpose description
+- Dependencies
+- Expected state
+- Side effects
+- Verification steps 

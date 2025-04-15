@@ -1,0 +1,36 @@
+# Code Refactoring
+
+## File Size
+- Maximum 300 LOC
+- Split at 200+ LOC
+- Extract components
+- Create hooks
+- Separate concerns
+
+## Component Structure
+- Single responsibility
+- Props interface
+- Error boundaries
+- Loading states
+- Proper types
+
+## Hook Extraction
+- Reusable logic
+- State management
+- Side effects
+- Event handlers
+- Complex calculations
+
+## Performance
+- Memoization
+- Code splitting
+- Bundle optimization
+- Tree shaking
+- Dead code elimination
+
+## Future-Proofing
+- Swift compatibility
+- Modular design
+- Clear interfaces
+- Platform agnostic
+- Extensible patterns 

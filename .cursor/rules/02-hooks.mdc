@@ -1,0 +1,40 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Hook Naming & Structure
+
+## Naming Convention
+- Prefix with 'use'
+- Camel case after prefix
+- Descriptive of functionality
+- Examples: useVaultMemories, useAudioRecorder
+
+## Structure
+- Single responsibility principle
+- Return consistent interface
+- Handle loading/error/success states
+- Support TypeScript generics where appropriate
+- Document return type explicitly
+
+## State Management
+- Include isLoading boolean
+- Include error handling
+- Include success state
+- Support optimistic updates
+- Handle offline state if data-related
+
+## Error Handling
+- Try/catch for async operations
+- Proper error typing
+- Error message formatting
+- Recovery mechanisms
+- Retry logic where appropriate
+
+## Performance
+- Memoize expensive calculations
+- Debounce rapid changes
+- Cache results when possible
+- Clean up subscriptions
+- Handle side effects properly 

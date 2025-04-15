@@ -1,0 +1,36 @@
+# Form Standards
+
+## Structure
+- Use React Hook Form
+- Implement Zod validation schemas
+- Type all form fields
+- Include proper labels and ARIA
+- Support keyboard navigation
+
+## Validation
+- Client-side validation
+- Server-side validation
+- File size limits (20MB max)
+- Audio length limits (5 min max)
+- Supported format validation
+
+## Error States
+- Field-level errors
+- Form-level errors
+- Network errors
+- Validation errors
+- Upload errors
+
+## User Experience
+- Loading states
+- Success feedback
+- Error messages
+- Progress indicators
+- Clear reset functionality
+
+## Accessibility
+- Proper HTML5 input types
+- Error announcements
+- Required field marking
+- Focus management
+- Screen reader support 
