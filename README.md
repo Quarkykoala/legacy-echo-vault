@@ -1,73 +1,139 @@
-# Welcome to your Lovable project
+# LegacyChain: Voice-First Memory Vault
 
-## Project info
+LegacyChain is a secure, emotionally resonant memory vault for families. It allows users to preserve voice messages, memories, and personal reflections in a secure, intergenerational space that serves as a time capsule of human experience.
 
-**URL**: https://lovable.dev/projects/a46aa828-c21d-4b36-9a86-a353cccf2665
+## 🎯 Project Vision
 
-## How can I edit this code?
+LegacyChain provides a platform where ancestral wisdom, family love, and personal stories can be captured and passed on through voice recordings, timelines, and intentional memory threading. It's where your descendants can hear not just your words, but your soul.
 
-There are several ways of editing your application.
+## 📋 Core Features
 
-**Use Lovable**
+- **Family Vaults**: Create and manage private memory collections
+- **Voice/Text Recording**: Capture memories up to 5 minutes in length
+- **Time Capsules**: Set memories to unlock at future dates (up to 100 years)
+- **Family Tree UI**: Visual exploration of memories through family connections
+- **Responsive Design**: Works across mobile and desktop with a beautiful UI
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a46aa828-c21d-4b36-9a86-a353cccf2665) and start prompting.
+## 🏗️ Project Structure
 
-Changes made via Lovable will be committed automatically to this repo.
+LegacyChain is a monorepo containing both backend and frontend code:
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+/
+├── backend/           # Flask API application
+├── frontend/          # Next.js web application
+├── shared/            # Shared types, utilities, and constants
+├── migrations/        # Database migration scripts
+├── scripts/           # Utility scripts for development and deployment
+├── tests/             # Integration and end-to-end tests
+└── docs/              # Project documentation and ADRs
 ```
 
-**Edit a file directly in GitHub**
+## 🛠️ Technology Stack
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Backend
+- Flask (Python 3.10+)
+- SQLAlchemy
+- JWT Authentication
+- Structured Logging (structlog)
+- Error Tracking (Sentry)
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
+### Frontend
+- Next.js
 - TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- TailwindCSS
+- Shadcn/UI
+- React Hook Form + Zod
+- Supabase Storage (for voice recordings)
 
-## How can I deploy this project?
+### Infrastructure
+- GitHub Actions for CI/CD
+- Supabase for storage and authentication
+- Vercel for frontend hosting
+- Docker for containerization
 
-Simply open [Lovable](https://lovable.dev/projects/a46aa828-c21d-4b36-9a86-a353cccf2665) and click on Share -> Publish.
+## 🚀 Getting Started
 
-## Can I connect a custom domain to my Lovable project?
+### Prerequisites
+- Node.js 20+
+- Python 3.10+
+- pnpm (for frontend package management)
+- Docker (optional, for local development)
 
-Yes it is!
+### Installation
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+1. Clone the repository
+   ```bash
+   git clone https://github.com/your-org/legacychain.git
+   cd legacychain
+   ```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+2. Set up the backend
+   ```bash
+   cd backend
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+
+3. Set up the frontend
+   ```bash
+   cd frontend/my-app
+   pnpm install
+   ```
+
+4. Create a `.env` file based on `.env.example`
+
+5. Start the development servers
+   ```bash
+   # Terminal 1 - Backend (in backend directory)
+   flask run --debug
+
+   # Terminal 2 - Frontend (in frontend/my-app directory)
+   pnpm dev
+   ```
+
+6. Open your browser to http://localhost:3000
+
+## 🧪 Testing
+
+- Backend: `pytest` (from backend directory)
+- Frontend: `pnpm test` (from frontend/my-app directory)
+
+## 🔄 Development Workflow
+
+Please refer to our [Contributing Guide](CONTRIBUTING.md) for details on our development process, branching strategy, and pull request workflow.
+
+## 📚 Documentation
+
+- Architecture Decision Records (ADRs) are in the [docs/adr](docs/adr) directory
+- API documentation is available at http://localhost:5000/api/docs when running locally
+- Technical specifications can be found in [docs/](docs/)
+
+## 🔒 Security
+
+Security is a top priority for LegacyChain. We follow best practices for:
+- Data encryption (in transit and at rest)
+- Authentication and authorization
+- Input validation and sanitization
+- GDPR compliance
+
+To report a security vulnerability, please contact security@yourcompany.com.
+
+## 📄 License
+
+This project is proprietary and confidential. Unauthorized copying, distributing, or use of this software is strictly prohibited.
+
+## 👥 Team
+
+- Product Owner: [Name]
+- Tech Lead: [Name]
+- Backend Team: [Names]
+- Frontend Team: [Names]
+- Design: [Names]
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please check out our [Contributing Guide](CONTRIBUTING.md) to get started.

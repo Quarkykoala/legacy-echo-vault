@@ -1,0 +1,50 @@
+# LegacyChain CODEOWNERS file
+# This file defines code ownership and required reviewers for different parts of the codebase
+# Format: path/to/directory_or_file @username_or_team
+
+# Default owners for everything in the repo (unless a later match takes precedence)
+* @project-lead
+
+# Backend code ownership
+/backend/ @backend-team
+/backend/api/ @api-team
+/backend/models.py @data-team @security-team
+/backend/auth.py @security-team
+
+# Frontend code ownership
+/frontend/ @frontend-team
+/frontend/my-app/apps/web/src/components/ @ui-team
+/frontend/my-app/apps/web/src/hooks/ @frontend-core-team
+/frontend/my-app/apps/web/src/pages/ @feature-team
+
+# Shared code and types
+/shared/ @platform-team
+
+# Infrastructure and CI/CD
+/.github/ @devops-team
+/scripts/ @devops-team
+/.github/workflows/ @devops-team @security-team
+
+# Security-sensitive files (require security team approval)
+**/auth* @security-team
+**/security* @security-team
+**/*password* @security-team
+**/*crypt* @security-team
+**/.*rc @devops-team
+**/*.env.example @devops-team @security-team
+
+# Documentation
+/docs/ @docs-team
+*.md @docs-team
+
+# Database migrations (require DBA review)
+/migrations/ @data-team @backend-team
+
+# Critical business logic - requires multiple approvals
+/backend/api/vault/ @backend-team @product-team
+/frontend/my-app/apps/web/src/features/vault/ @frontend-team @product-team
+
+# Test files
+/tests/ @quality-team
+**/*.test.* @quality-team
+**/*.spec.* @quality-team 
