@@ -1,184 +1,182 @@
 import { ApiResponse, CreateMemoryInput, CreateThreadInput, CreateVaultInput, Memory, Thread, User, Vault, UpdateThreadInput } from '@/lib/types';
 import { supabase } from '@/lib/supabase';
+import { User as AuthUser } from '@supabase/supabase-js';
+import { PostgrestBuilder } from '@supabase/postgrest-js';
 
 // Helper function to handle API responses
 const handleResponse = async <T>(
-  promise: Promise<{ data: T | null; error: any }>
+  action: PostgrestBuilder<T> | Promise<{ data: T | null; error: any }>
 ): Promise<ApiResponse<T>> => {
   try {
-    const { data, error } = await promise;
+    const { data, error } = await action;
     if (error) throw error;
     return { data, error: null };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('API Error:', error);
-    return { data: null, error: error.message };
+    return { 
+      data: null, 
+      error: error instanceof Error ? error.message : 'An unknown error occurred' 
+    };
   }
 };
 
 // User APIs
-export const getCurrentUser = async (): Promise<ApiResponse<User>> => {
-  return handleResponse(supabase.auth.getUser());
+export const getCurrentUser = async (): Promise<ApiResponse<AuthUser>> => {
+  const { data: { user }, error } = await supabase.auth.getUser();
+  if (error) return { data: null, error: error.message };
+  if (!user) return { data: null, error: 'No user found' };
+  return { data: user, error: null };
 };
 
 export const updateUserProfile = async (
   userId: string,
   updates: Partial<User>
 ): Promise<ApiResponse<User>> => {
-  return handleResponse(
-    supabase
-      .from('users')
-      .update(updates)
-      .eq('id', userId)
-      .select()
-      .single()
-  );
+  const response = supabase
+    .from('users')
+    .update(updates)
+    .eq('id', userId)
+    .select()
+    .single();
+  return handleResponse(response);
 };
 
 // Vault APIs
 export const getVaults = async (userId: string): Promise<ApiResponse<Vault[]>> => {
-  return handleResponse(
-    supabase
-      .from('vaults')
-      .select('*, members!inner(*)')
-      .eq('members.user_id', userId)
-  );
+  const response = supabase
+    .from('vaults')
+    .select('*, members!inner(*)')
+    .eq('members.user_id', userId);
+  return handleResponse(response);
 };
 
 export const createVault = async (
   input: CreateVaultInput
 ): Promise<ApiResponse<Vault>> => {
-  return handleResponse(
-    supabase
-      .from('vaults')
-      .insert([input])
-      .select()
-      .single()
-  );
+  const response = supabase
+    .from('vaults')
+    .insert([input])
+    .select()
+    .single();
+  return handleResponse(response);
 };
 
 export const updateVault = async (
   vaultId: string,
   updates: Partial<Vault>
 ): Promise<ApiResponse<Vault>> => {
-  return handleResponse(
-    supabase
-      .from('vaults')
-      .update(updates)
-      .eq('id', vaultId)
-      .select()
-      .single()
-  );
+  const response = supabase
+    .from('vaults')
+    .update(updates)
+    .eq('id', vaultId)
+    .select()
+    .single();
+  return handleResponse(response);
 };
 
 export const deleteVault = async (
   vaultId: string
 ): Promise<ApiResponse<null>> => {
-  return handleResponse(
-    supabase
-      .from('vaults')
-      .delete()
-      .eq('id', vaultId)
-  );
+  const response = supabase
+    .from('vaults')
+    .delete()
+    .eq('id', vaultId);
+  return handleResponse(response);
 };
 
 // Memory APIs
 export const getMemories = async (
   vaultId: string
 ): Promise<ApiResponse<Memory[]>> => {
-  return handleResponse(
-    supabase
-      .from('memories')
-      .select('*')
-      .eq('vault_id', vaultId)
-      .order('created_at', { ascending: false })
-  );
+  const response = supabase
+    .from('memories')
+    .select('*')
+    .eq('vault_id', vaultId)
+    .order('created_at', { ascending: false });
+  return handleResponse(response);
 };
 
 export const createMemory = async (
   input: CreateMemoryInput
 ): Promise<ApiResponse<Memory>> => {
-  return handleResponse(
-    supabase
-      .from('memories')
-      .insert([input])
-      .select()
-      .single()
-  );
+  const response = supabase
+    .from('memories')
+    .insert([input])
+    .select()
+    .single();
+  return handleResponse(response);
 };
 
 export const updateMemory = async (
   memoryId: string,
   updates: Partial<Memory>
 ): Promise<ApiResponse<Memory>> => {
-  return handleResponse(
-    supabase
-      .from('memories')
-      .update(updates)
-      .eq('id', memoryId)
-      .select()
-      .single()
-  );
+  const response = supabase
+    .from('memories')
+    .update(updates)
+    .eq('id', memoryId)
+    .select()
+    .single();
+  return handleResponse(response);
 };
 
 export const deleteMemory = async (
   memoryId: string
 ): Promise<ApiResponse<null>> => {
-  return handleResponse(
-    supabase
-      .from('memories')
-      .delete()
-      .eq('id', memoryId)
-  );
+  const response = supabase
+    .from('memories')
+    .delete()
+    .eq('id', memoryId);
+  return handleResponse(response);
 };
 
 // Thread APIs
 export const getThreads = async (
   memoryId: string
 ): Promise<ApiResponse<Thread[]>> => {
-  return handleResponse(
-    supabase
-      .from('threads')
-      .select('*')
-      .eq('memory_id', memoryId)
-      .order('created_at', { ascending: true })
-  );
+  const response = supabase
+    .from('threads')
+    .select('*')
+    .eq('memory_id', memoryId)
+    .order('created_at', { ascending: true });
+  return handleResponse(response);
 };
 
 export const createThread = async (
   input: CreateThreadInput
 ): Promise<ApiResponse<Thread>> => {
-  return handleResponse(
-    supabase
-      .from('threads')
-      .insert([{ ...input, created_by: supabase.auth.user()?.id }])
-      .select()
-      .single()
-  );
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { data: null, error: 'User not authenticated' };
+
+  const response = supabase
+    .from('threads')
+    .insert([{ ...input, created_by: user.id }])
+    .select()
+    .single();
+  return handleResponse(response);
 };
 
 export const updateThread = async (
   threadId: string,
   updates: Partial<Thread>
 ): Promise<ApiResponse<Thread>> => {
-  return handleResponse(
-    supabase
-      .from('threads')
-      .update({ ...updates, is_edited: true, updated_at: new Date().toISOString() })
-      .eq('id', threadId)
-      .select()
-      .single()
-  );
+  const response = supabase
+    .from('threads')
+    .update({ ...updates, is_edited: true, updated_at: new Date().toISOString() })
+    .eq('id', threadId)
+    .select()
+    .single();
+  return handleResponse(response);
 };
 
 export const deleteThread = async (
   threadId: string
 ): Promise<ApiResponse<null>> => {
-  return handleResponse(
-    supabase
-      .from('threads')
-      .delete()
-      .eq('id', threadId)
-  );
+  const response = supabase
+    .from('threads')
+    .delete()
+    .eq('id', threadId);
+  return handleResponse(response);
 };
 
 // Storage APIs
@@ -203,102 +201,125 @@ export const uploadFile = async (
 };
 
 // Access Control
+export type VaultRole = 'owner' | 'editor' | 'viewer';
+
 export const getVaultRole = async (
   vaultId: string,
   userId: string
-): Promise<ApiResponse<'owner' | 'editor' | 'viewer' | null>> => {
-  const { data, error } = await supabase
+): Promise<ApiResponse<VaultRole | null>> => {
+  const query = supabase
     .from('members')
     .select('role')
     .eq('vault_id', vaultId)
     .eq('user_id', userId)
     .single();
 
-  if (error) {
-    return { data: null, error: error.message };
-  }
-
-  return { data: data.role, error: null };
+  const response = await handleResponse<{ role: VaultRole }>(query);
+  return { data: response.data ? response.data.role : null, error: response.error };
 };
 
+// Improved thread service with proper typing and modern auth
 export const threadService = {
   async createThread(input: CreateThreadInput): Promise<Thread> {
-    try {
-      const { data, error } = await supabase
-        .from('threads')
-        .insert([{ ...input, created_by: supabase.auth.user()?.id }])
-        .single();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
 
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error('Error creating thread:', error);
-      throw error;
-    }
+    const response = await handleResponse(
+      supabase
+        .from('threads')
+        .insert([{ ...input, created_by: user.id }])
+        .select()
+        .single()
+    );
+
+    if (!response.data) throw new Error(response.error || 'Failed to create thread');
+    return response.data;
   },
 
   async updateThread(id: string, input: UpdateThreadInput): Promise<Thread> {
-    try {
-      const { data, error } = await supabase
+    const response = await handleResponse(
+      supabase
         .from('threads')
         .update({ ...input, is_edited: true, updated_at: new Date().toISOString() })
-        .match({ id })
-        .single();
+        .eq('id', id)
+        .select()
+        .single()
+    );
 
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error('Error updating thread:', error);
-      throw error;
-    }
+    if (!response.data) throw new Error(response.error || 'Failed to update thread');
+    return response.data;
   },
 
   async deleteThread(id: string): Promise<void> {
-    try {
-      const { error } = await supabase
+    const response = await handleResponse(
+      supabase
         .from('threads')
         .delete()
-        .match({ id });
+        .eq('id', id)
+    );
 
-      if (error) throw error;
-    } catch (error) {
-      console.error('Error deleting thread:', error);
-      throw error;
-    }
+    if (response.error) throw new Error(response.error);
   },
 
   async getThreadsByMemoryId(memoryId: string): Promise<Thread[]> {
-    try {
-      const { data, error } = await supabase
+    const response = await handleResponse(
+      supabase
         .from('threads')
         .select('*')
         .eq('memory_id', memoryId)
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: true })
+    );
 
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error('Error fetching threads:', error);
-      throw error;
-    }
+    if (!response.data) throw new Error(response.error || 'Failed to fetch threads');
+    return response.data;
   },
 
-  async subscribeToThreads(memoryId: string, callback: (threads: Thread[]) => void): Promise<() => void> {
-    const subscription = supabase
-      .from(`threads:memory_id=eq.${memoryId}`)
-      .on('*', async () => {
-        const { data } = await supabase
-          .from('threads')
-          .select('*')
-          .eq('memory_id', memoryId)
-          .order('created_at', { ascending: true });
-        
-        if (data) callback(data);
-      })
+  async subscribeToThreads(
+    memoryId: string,
+    callback: (threads: Thread[]) => void
+  ): Promise<() => void> {
+    const channel = supabase
+      .channel('threads')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'threads',
+          filter: `memory_id=eq.${memoryId}`,
+        },
+        async () => {
+          const response = await handleResponse(
+            supabase
+              .from('threads')
+              .select('*')
+              .eq('memory_id', memoryId)
+              .order('created_at', { ascending: true })
+          );
+          if (response.data) callback(response.data);
+        }
+      )
       .subscribe();
 
     return () => {
-      subscription.unsubscribe();
+      channel.unsubscribe();
     };
   }
+};
+
+export const vaultService = {
+  async getUserVaultRole(vaultId: string): Promise<VaultRole | null> {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return null;
+
+    const { data, error } = await supabase
+      .from('vault_members')
+      .select('role')
+      .eq('vault_id', vaultId)
+      .eq('user_id', user.id)
+      .single();
+
+    if (error || !data) return null;
+    return data.role as VaultRole;
+  },
 };
