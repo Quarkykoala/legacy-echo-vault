@@ -1,107 +1,184 @@
-import { Database } from '@/lib/database.types';
+import { ApiResponse, CreateMemoryInput, CreateThreadInput, CreateVaultInput, Memory, Thread, User, Vault, UpdateThreadInput } from '@/lib/types';
+import { supabase } from '@/lib/supabase';
 
-type Vault = Database['public']['Tables']['vaults']['Row'];
-type Memory = Database['public']['Tables']['memories']['Row'];
-type Thread = Database['public']['Tables']['threads']['Row'];
-type Member = Database['public']['Tables']['members']['Row'];
-
-// Mock data
-const mockVaults: Vault[] = [
-  {
-    id: 'vault-1',
-    name: 'Family Memories',
-    creator_id: 'mock-user-id',
-    theme: ['sepia'],
-    created_at: new Date().toISOString()
-  },
-  {
-    id: 'vault-2',
-    name: 'Travel Adventures',
-    creator_id: 'mock-user-id',
-    theme: ['modern'],
-    created_at: new Date().toISOString()
+// Helper function to handle API responses
+const handleResponse = async <T>(
+  promise: Promise<{ data: T | null; error: any }>
+): Promise<ApiResponse<T>> => {
+  try {
+    const { data, error } = await promise;
+    if (error) throw error;
+    return { data, error: null };
+  } catch (error: any) {
+    console.error('API Error:', error);
+    return { data: null, error: error.message };
   }
-];
+};
 
-const mockMemories: Memory[] = [
-  {
-    id: 'memory-1',
-    vault_id: 'vault-1',
-    title: 'Summer BBQ 2023',
-    story: 'Amazing family gathering with delicious food and great weather!',
-    type: 'photo',
-    created_by: 'mock-user-id',
-    tags: ['family', 'summer'],
-    unlock_date: null,
-    created_at: new Date().toISOString()
-  }
-];
+// User APIs
+export const getCurrentUser = async (): Promise<ApiResponse<User>> => {
+  return handleResponse(supabase.auth.getUser());
+};
 
-const mockThreads: Thread[] = [
-  {
-    id: 'thread-1',
-    memory_id: 'memory-1',
-    contributor_id: 'mock-user-id',
-    text_note: 'What a wonderful day that was!',
-    voice_note: null,
-    photo: null,
-    created_at: new Date().toISOString()
-  }
-];
+export const updateUserProfile = async (
+  userId: string,
+  updates: Partial<User>
+): Promise<ApiResponse<User>> => {
+  return handleResponse(
+    supabase
+      .from('users')
+      .update(updates)
+      .eq('id', userId)
+      .select()
+      .single()
+  );
+};
 
 // Vault APIs
-export const getVaults = async (userId: string): Promise<Vault[]> => {
-  return mockVaults.filter(vault => vault.creator_id === userId);
+export const getVaults = async (userId: string): Promise<ApiResponse<Vault[]>> => {
+  return handleResponse(
+    supabase
+      .from('vaults')
+      .select('*, members!inner(*)')
+      .eq('members.user_id', userId)
+  );
 };
 
 export const createVault = async (
-  name: string, 
-  creatorId: string, 
-  theme: string[] = []
-): Promise<Vault> => {
-  const newVault: Vault = {
-    id: `vault-${Date.now()}`,
-    name,
-    creator_id: creatorId,
-    theme,
-    created_at: new Date().toISOString()
-  };
-  mockVaults.push(newVault);
-  return newVault;
+  input: CreateVaultInput
+): Promise<ApiResponse<Vault>> => {
+  return handleResponse(
+    supabase
+      .from('vaults')
+      .insert([input])
+      .select()
+      .single()
+  );
+};
+
+export const updateVault = async (
+  vaultId: string,
+  updates: Partial<Vault>
+): Promise<ApiResponse<Vault>> => {
+  return handleResponse(
+    supabase
+      .from('vaults')
+      .update(updates)
+      .eq('id', vaultId)
+      .select()
+      .single()
+  );
+};
+
+export const deleteVault = async (
+  vaultId: string
+): Promise<ApiResponse<null>> => {
+  return handleResponse(
+    supabase
+      .from('vaults')
+      .delete()
+      .eq('id', vaultId)
+  );
 };
 
 // Memory APIs
-export const getMemories = async (vaultId: string): Promise<Memory[]> => {
-  return mockMemories.filter(memory => memory.vault_id === vaultId);
+export const getMemories = async (
+  vaultId: string
+): Promise<ApiResponse<Memory[]>> => {
+  return handleResponse(
+    supabase
+      .from('memories')
+      .select('*')
+      .eq('vault_id', vaultId)
+      .order('created_at', { ascending: false })
+  );
 };
 
 export const createMemory = async (
-  memory: Omit<Memory, 'id' | 'created_at'>
-): Promise<Memory> => {
-  const newMemory: Memory = {
-    ...memory,
-    id: `memory-${Date.now()}`,
-    created_at: new Date().toISOString()
-  };
-  mockMemories.push(newMemory);
-  return newMemory;
+  input: CreateMemoryInput
+): Promise<ApiResponse<Memory>> => {
+  return handleResponse(
+    supabase
+      .from('memories')
+      .insert([input])
+      .select()
+      .single()
+  );
+};
+
+export const updateMemory = async (
+  memoryId: string,
+  updates: Partial<Memory>
+): Promise<ApiResponse<Memory>> => {
+  return handleResponse(
+    supabase
+      .from('memories')
+      .update(updates)
+      .eq('id', memoryId)
+      .select()
+      .single()
+  );
+};
+
+export const deleteMemory = async (
+  memoryId: string
+): Promise<ApiResponse<null>> => {
+  return handleResponse(
+    supabase
+      .from('memories')
+      .delete()
+      .eq('id', memoryId)
+  );
 };
 
 // Thread APIs
-export const getThreads = async (memoryId: string): Promise<Thread[]> => {
-  return mockThreads.filter(thread => thread.memory_id === memoryId);
+export const getThreads = async (
+  memoryId: string
+): Promise<ApiResponse<Thread[]>> => {
+  return handleResponse(
+    supabase
+      .from('threads')
+      .select('*')
+      .eq('memory_id', memoryId)
+      .order('created_at', { ascending: true })
+  );
 };
 
-export const addThread = async (
-  thread: Omit<Thread, 'id' | 'created_at'>
-): Promise<Thread> => {
-  const newThread: Thread = {
-    ...thread,
-    id: `thread-${Date.now()}`,
-    created_at: new Date().toISOString()
-  };
-  mockThreads.push(newThread);
-  return newThread;
+export const createThread = async (
+  input: CreateThreadInput
+): Promise<ApiResponse<Thread>> => {
+  return handleResponse(
+    supabase
+      .from('threads')
+      .insert([{ ...input, created_by: supabase.auth.user()?.id }])
+      .select()
+      .single()
+  );
+};
+
+export const updateThread = async (
+  threadId: string,
+  updates: Partial<Thread>
+): Promise<ApiResponse<Thread>> => {
+  return handleResponse(
+    supabase
+      .from('threads')
+      .update({ ...updates, is_edited: true, updated_at: new Date().toISOString() })
+      .eq('id', threadId)
+      .select()
+      .single()
+  );
+};
+
+export const deleteThread = async (
+  threadId: string
+): Promise<ApiResponse<null>> => {
+  return handleResponse(
+    supabase
+      .from('threads')
+      .delete()
+      .eq('id', threadId)
+  );
 };
 
 // Storage APIs
@@ -109,37 +186,119 @@ export const uploadFile = async (
   bucket: string,
   filePath: string,
   file: File
-): Promise<string> => {
-  // Mock file upload - return a fake URL
-  return `https://fake-storage.com/${bucket}/${filePath}`;
+): Promise<ApiResponse<string>> => {
+  const { data, error } = await supabase.storage
+    .from(bucket)
+    .upload(filePath, file);
+
+  if (error) {
+    return { data: null, error: error.message };
+  }
+
+  const { data: publicUrl } = supabase.storage
+    .from(bucket)
+    .getPublicUrl(data.path);
+
+  return { data: publicUrl.publicUrl, error: null };
 };
 
-// User Profile
-export const createUserProfile = async (
-  userId: string,
-  email: string,
-  name: string,
-): Promise<void> => {
-  // Mock user creation
-  console.log('Created user profile:', { userId, email, name });
-};
-
-export const getUserProfile = async (userId: string) => {
-  // Mock user profile
-  return {
-    id: userId,
-    name: 'Test User',
-    email: 'test@example.com',
-    bio: 'This is a test user',
-    profile_image: null
-  };
-};
-
-// Access control
+// Access Control
 export const getVaultRole = async (
   vaultId: string,
   userId: string
-): Promise<'owner' | 'editor' | 'viewer' | null> => {
-  // For testing, always return 'owner' for the mock user
-  return userId === 'mock-user-id' ? 'owner' : null;
+): Promise<ApiResponse<'owner' | 'editor' | 'viewer' | null>> => {
+  const { data, error } = await supabase
+    .from('members')
+    .select('role')
+    .eq('vault_id', vaultId)
+    .eq('user_id', userId)
+    .single();
+
+  if (error) {
+    return { data: null, error: error.message };
+  }
+
+  return { data: data.role, error: null };
+};
+
+export const threadService = {
+  async createThread(input: CreateThreadInput): Promise<Thread> {
+    try {
+      const { data, error } = await supabase
+        .from('threads')
+        .insert([{ ...input, created_by: supabase.auth.user()?.id }])
+        .single();
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error creating thread:', error);
+      throw error;
+    }
+  },
+
+  async updateThread(id: string, input: UpdateThreadInput): Promise<Thread> {
+    try {
+      const { data, error } = await supabase
+        .from('threads')
+        .update({ ...input, is_edited: true, updated_at: new Date().toISOString() })
+        .match({ id })
+        .single();
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error updating thread:', error);
+      throw error;
+    }
+  },
+
+  async deleteThread(id: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('threads')
+        .delete()
+        .match({ id });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error deleting thread:', error);
+      throw error;
+    }
+  },
+
+  async getThreadsByMemoryId(memoryId: string): Promise<Thread[]> {
+    try {
+      const { data, error } = await supabase
+        .from('threads')
+        .select('*')
+        .eq('memory_id', memoryId)
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error fetching threads:', error);
+      throw error;
+    }
+  },
+
+  async subscribeToThreads(memoryId: string, callback: (threads: Thread[]) => void): Promise<() => void> {
+    const subscription = supabase
+      .from(`threads:memory_id=eq.${memoryId}`)
+      .on('*', async () => {
+        const { data } = await supabase
+          .from('threads')
+          .select('*')
+          .eq('memory_id', memoryId)
+          .order('created_at', { ascending: true });
+        
+        if (data) callback(data);
+      })
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }
 };

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
@@ -27,6 +26,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
+import { ErrorBoundary } from 'frontend/my-app/apps/web/components/ErrorBoundary';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -154,9 +154,11 @@ export function Layout({ children }: LayoutProps) {
       </header>
       
       {/* Main Content */}
-      <main className="flex-grow">
-        {children}
-      </main>
+      <ErrorBoundary>
+        <main className="flex-grow">
+          {children}
+        </main>
+      </ErrorBoundary>
       
       {/* Footer */}
       <footer className="bg-white border-t border-legacy-sepia py-4">
